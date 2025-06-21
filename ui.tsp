@@ -71,6 +71,10 @@ enum ItemType {
   select,
   file,
   date,
+  table,
+  pagination,
+  image,
+  link,
 }
 
 enum ItemDisplay {
