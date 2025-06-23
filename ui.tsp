@@ -6,30 +6,86 @@ using JsonSchema;
 namespace Schemas;
 
 model UI {
-  version: string;
+  ui: string;
   systems: Record<System>;
+  description?: string;
 }
 
 model System {
-  id: string;
+  @key id: string;
   title: string;
   pages: Record<Page>;
+  description?: string;
 }
 
 model Page {
   @key id: string;
   title: string;
-  items: Item[];
+  type: PageType;
+  description?: string;
+  elements: Array<TextElement | ButtonElement | TextFieldElement>;
   events: Event[];
 }
 
-model Item {
+enum PageType {
+  screen,
+  popup,
+}
+
+@discriminator("type")
+model Element {
   id: string;
-  title: string;
-  type: ItemType;
-  display?: ItemDisplay;
+  name: string;
+  type: ElementType;
+  display?: ElementDisplay;
+  disable?: string;
   events?: Event[];
+  description?: string;
+}
+
+enum ElementType {
+  button,
+  text,
+  textfield,
+  textarea,
+  password,
+  radio,
+  checkbox,
+  select,
+  file,
+  date,
+  table,
+  pagination,
+  image,
+  icon,
+  link,
+}
+
+model TextElement extends Element {
+  type: ElementType.text;
+}
+
+model InputElement extends Element {
+  placeholder?: string;
   validations?: Validation[];
+  value: string;
+}
+
+model ButtonElement extends InputElement {
+  type: ElementType.button;
+}
+
+model TextFieldElement extends InputElement {
+  type: ElementType.textfield;
+}
+
+model PasswordFieldElement extends InputElement {
+  type: ElementType.password;
+}
+
+model Bind {
+  source: string; // $API(get, /users/me).response.name
+  target: string; // $Item(item).text
 }
 
 model Event {
@@ -61,23 +117,7 @@ enum ValidationType {
   max,
 }
 
-enum ItemType {
-  button,
-  static,
-  textfield,
-  textarea,
-  radio,
-  checkbox,
-  select,
-  file,
-  date,
-  table,
-  pagination,
-  image,
-  link,
-}
-
-enum ItemDisplay {
+enum ElementDisplay {
   inline,
   block,
 }

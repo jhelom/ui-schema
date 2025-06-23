@@ -1,0 +1,383 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "ui.schema.json",
+    "$defs": {
+        "UI": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "UI.json",
+            "type": "object",
+            "properties": {
+                "ui": {
+                    "type": "string"
+                },
+                "systems": {
+                    "$ref": "#/$defs/RecordSystem"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ui",
+                "systems"
+            ],
+            "$defs": {
+                "RecordSystem": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "$ref": "System.json"
+                    }
+                }
+            }
+        },
+        "System": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "System.json",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "pages": {
+                    "$ref": "#/$defs/RecordPage"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "title",
+                "pages"
+            ],
+            "$defs": {
+                "RecordPage": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "$ref": "Page.json"
+                    }
+                }
+            }
+        },
+        "Page": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Page.json",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "PageType.json"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "elements": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "TextElement.json"
+                            },
+                            {
+                                "$ref": "ButtonElement.json"
+                            },
+                            {
+                                "$ref": "TextFieldElement.json"
+                            }
+                        ]
+                    }
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Event.json"
+                    }
+                }
+            },
+            "required": [
+                "id",
+                "title",
+                "type",
+                "elements",
+                "events"
+            ]
+        },
+        "PageType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PageType.json",
+            "type": "string",
+            "enum": [
+                "screen",
+                "popup"
+            ]
+        },
+        "TextElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TextElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "text"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "Element": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Element.json",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "ElementType.json"
+                },
+                "display": {
+                    "$ref": "ElementDisplay.json"
+                },
+                "disable": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Event.json"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "type"
+            ]
+        },
+        "ElementType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ElementType.json",
+            "type": "string",
+            "enum": [
+                "button",
+                "text",
+                "textfield",
+                "textarea",
+                "password",
+                "radio",
+                "checkbox",
+                "select",
+                "file",
+                "date",
+                "table",
+                "pagination",
+                "image",
+                "icon",
+                "link"
+            ]
+        },
+        "ElementDisplay": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ElementDisplay.json",
+            "type": "string",
+            "enum": [
+                "inline",
+                "block"
+            ]
+        },
+        "Event": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Event.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "EventType.json"
+                },
+                "handler": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "handler"
+            ]
+        },
+        "EventType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "EventType.json",
+            "type": "string",
+            "enum": [
+                "click",
+                "change",
+                "submit",
+                "load",
+                "unload",
+                "focus",
+                "blur"
+            ]
+        },
+        "ButtonElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ButtonElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "button"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "InputElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "InputElement.json",
+            "type": "object",
+            "properties": {
+                "placeholder": {
+                    "type": "string"
+                },
+                "validations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Validation.json"
+                    }
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "Validation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Validation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "ValidationType.json"
+                },
+                "value": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ]
+        },
+        "ValidationType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ValidationType.json",
+            "type": "string",
+            "enum": [
+                "required",
+                "minLength",
+                "maxLength",
+                "pattern",
+                "min",
+                "max"
+            ]
+        },
+        "TextFieldElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TextFieldElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "textfield"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "PasswordFieldElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PasswordFieldElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "password"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "Bind": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Bind.json",
+            "type": "object",
+            "properties": {
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "source",
+                "target"
+            ]
+        }
+    }
+}
