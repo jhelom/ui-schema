@@ -8,7 +8,8 @@
             "type": "object",
             "properties": {
                 "ui": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^\\d+\\.\\d+\\.\\d+$"
                 },
                 "systems": {
                     "$ref": "#/$defs/RecordSystem"
@@ -37,7 +38,8 @@
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
                 },
                 "title": {
                     "type": "string"
@@ -46,6 +48,9 @@
                     "$ref": "#/$defs/RecordPage"
                 },
                 "description": {
+                    "type": "string"
+                },
+                "todo": {
                     "type": "string"
                 }
             },
@@ -70,7 +75,8 @@
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
                 },
                 "title": {
                     "type": "string"
@@ -78,29 +84,72 @@
                 "type": {
                     "$ref": "PageType.json"
                 },
+                "events": {
+                    "$ref": "#/$defs/RecordPageEvent"
+                },
                 "description": {
                     "type": "string"
                 },
+                "todo": {
+                    "type": "string"
+                },
                 "elements": {
-                    "type": "array",
-                    "items": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
                         "anyOf": [
-                            {
-                                "$ref": "TextElement.json"
-                            },
                             {
                                 "$ref": "ButtonElement.json"
                             },
                             {
-                                "$ref": "TextFieldElement.json"
+                                "$ref": "TextElement.json"
+                            },
+                            {
+                                "$ref": "TextInputElement.json"
+                            },
+                            {
+                                "$ref": "TextAreaElement.json"
+                            },
+                            {
+                                "$ref": "PasswordInputElement.json"
+                            },
+                            {
+                                "$ref": "CheckboxElement.json"
+                            },
+                            {
+                                "$ref": "RadioElement.json"
+                            },
+                            {
+                                "$ref": "SelectElement.json"
+                            },
+                            {
+                                "$ref": "FileUploadElement.json"
+                            },
+                            {
+                                "$ref": "FileDownloadElement.json"
+                            },
+                            {
+                                "$ref": "DateInputElement.json"
+                            },
+                            {
+                                "$ref": "TimeInputElement.json"
+                            },
+                            {
+                                "$ref": "ImageElement.json"
+                            },
+                            {
+                                "$ref": "IconElement.json"
+                            },
+                            {
+                                "$ref": "LinkElement.json"
+                            },
+                            {
+                                "$ref": "PaginationElement.json"
+                            },
+                            {
+                                "$ref": "TableElement.json"
                             }
                         ]
-                    }
-                },
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Event.json"
                     }
                 }
             },
@@ -108,9 +157,18 @@
                 "id",
                 "title",
                 "type",
-                "elements",
-                "events"
-            ]
+                "events",
+                "elements"
+            ],
+            "$defs": {
+                "RecordPageEvent": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "$ref": "PageEvent.json"
+                    }
+                }
+            }
         },
         "PageType": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -121,99 +179,13 @@
                 "popup"
             ]
         },
-        "TextElement": {
+        "PageEvent": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TextElement.json",
+            "$id": "PageEvent.json",
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string",
-                    "const": "text"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "Element": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Element.json",
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "$ref": "ElementType.json"
-                },
-                "display": {
-                    "$ref": "ElementDisplay.json"
-                },
-                "disable": {
-                    "type": "string"
-                },
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "Event.json"
-                    }
-                },
-                "description": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "name",
-                "type"
-            ]
-        },
-        "ElementType": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ElementType.json",
-            "type": "string",
-            "enum": [
-                "button",
-                "text",
-                "textfield",
-                "textarea",
-                "password",
-                "radio",
-                "checkbox",
-                "select",
-                "file",
-                "date",
-                "table",
-                "pagination",
-                "image",
-                "icon",
-                "link"
-            ]
-        },
-        "ElementDisplay": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ElementDisplay.json",
-            "type": "string",
-            "enum": [
-                "inline",
-                "block"
-            ]
-        },
-        "Event": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Event.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "$ref": "EventType.json"
+                    "$ref": "PageEventType.json"
                 },
                 "handler": {
                     "type": "string"
@@ -224,18 +196,13 @@
                 "handler"
             ]
         },
-        "EventType": {
+        "PageEventType": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "EventType.json",
+            "$id": "PageEventType.json",
             "type": "string",
             "enum": [
-                "click",
-                "change",
-                "submit",
                 "load",
-                "unload",
-                "focus",
-                "blur"
+                "unload"
             ]
         },
         "ButtonElement": {
@@ -320,13 +287,146 @@
                 "minLength",
                 "maxLength",
                 "pattern",
-                "min",
-                "max"
+                "integer",
+                "minInteger",
+                "maxInteger",
+                "date",
+                "email",
+                "url"
             ]
         },
-        "TextFieldElement": {
+        "Element": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TextFieldElement.json",
+            "$id": "Element.json",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "ElementType.json"
+                },
+                "display": {
+                    "$ref": "ElementDisplay.json"
+                },
+                "disable": {
+                    "type": "string"
+                },
+                "visible": {
+                    "type": "string"
+                },
+                "events": {
+                    "$ref": "#/$defs/RecordElementEvent"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "type"
+            ],
+            "$defs": {
+                "RecordElementEvent": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "$ref": "ElementEvent.json"
+                    }
+                }
+            }
+        },
+        "ElementType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ElementType.json",
+            "type": "string",
+            "enum": [
+                "button",
+                "text",
+                "textfield",
+                "textarea",
+                "password",
+                "radio",
+                "checkbox",
+                "select",
+                "fileUpload",
+                "fileDownload",
+                "date",
+                "time",
+                "table",
+                "pagination",
+                "image",
+                "icon",
+                "link"
+            ]
+        },
+        "ElementDisplay": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ElementDisplay.json",
+            "type": "string",
+            "enum": [
+                "inline",
+                "block"
+            ]
+        },
+        "ElementEvent": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ElementEvent.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "ElementEventType.json"
+                },
+                "handler": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "handler"
+            ]
+        },
+        "ElementEventType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ElementEventType.json",
+            "type": "string",
+            "enum": [
+                "click",
+                "change",
+                "focus",
+                "blur"
+            ]
+        },
+        "TextElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TextElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "text"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "TextInputElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TextInputElement.json",
             "type": "object",
             "properties": {
                 "type": {
@@ -343,9 +443,31 @@
                 }
             ]
         },
-        "PasswordFieldElement": {
+        "TextAreaElement": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "PasswordFieldElement.json",
+            "$id": "TextAreaElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "textarea"
+                },
+                "rows": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "PasswordInputElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PasswordInputElement.json",
             "type": "object",
             "properties": {
                 "type": {
@@ -360,6 +482,354 @@
                 {
                     "$ref": "InputElement.json"
                 }
+            ]
+        },
+        "CheckboxElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "CheckboxElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "checkbox"
+                },
+                "checked": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "RadioElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RadioElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "radio"
+                },
+                "checked": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "SelectElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "SelectElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "select"
+                },
+                "options": {
+                    "$ref": "#/$defs/RecordSelectOption"
+                }
+            },
+            "required": [
+                "type",
+                "options"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ],
+            "$defs": {
+                "RecordSelectOption": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "$ref": "SelectOption.json"
+                    }
+                }
+            }
+        },
+        "SelectOption": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "SelectOption.json",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "label",
+                "value"
+            ]
+        },
+        "FileUploadElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "FileUploadElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "fileUpload"
+                },
+                "accept": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "FileDownloadElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "FileDownloadElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "fileDownload"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "DateInputElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "DateInputElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "date"
+                },
+                "format": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "TimeInputElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TimeInputElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "time"
+                },
+                "format": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "InputElement.json"
+                }
+            ]
+        },
+        "ImageElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ImageElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "image"
+                },
+                "src": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "src"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "IconElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "IconElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "icon"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "name"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "LinkElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "LinkElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "link"
+                },
+                "href": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "href"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "PaginationElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PaginationElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "pagination"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ]
+        },
+        "TableElement": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TableElement.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "table"
+                },
+                "columns": {
+                    "$ref": "#/$defs/RecordTableColumn"
+                },
+                "selectable": {
+                    "type": "boolean"
+                },
+                "sortable": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type",
+                "columns"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Element.json"
+                }
+            ],
+            "$defs": {
+                "RecordTableColumn": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "$ref": "TableColumn.json"
+                    }
+                }
+            }
+        },
+        "TableColumn": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "TableColumn.json",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "sortable": {
+                    "type": "boolean"
+                },
+                "filterable": {
+                    "type": "boolean"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "title"
             ]
         },
         "Bind": {
@@ -377,6 +847,236 @@
             "required": [
                 "source",
                 "target"
+            ]
+        },
+        "RequiredValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RequiredValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "required"
+                },
+                "value": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "MinLengthValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "MinLengthValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "minLength"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "MaxLengthValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "MaxLengthValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "maxLength"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "PatternValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PatternValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "pattern"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "IntegerValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "IntegerValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "integer"
+                },
+                "value": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "MinIntegerValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "MinIntegerValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "minInteger"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "MaxIntegerValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "MaxIntegerValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "maxInteger"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "DateValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "DateValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "date"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "EmailValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "EmailValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "email"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
+            ]
+        },
+        "UrlValidation": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "UrlValidation.json",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "url"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Validation.json"
+                }
             ]
         }
     }
