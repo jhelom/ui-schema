@@ -3,33 +3,41 @@ import "@typespec/json-schema";
 using JsonSchema;
 
 @jsonSchema
-namespace Schemas;
-
-model UI {
+model UI is Memo {
   ui: string;
   systems: System[];
-  description?: string;
 }
 
-model System {
+model Memo {
+  description?: string;
+  todo?: string;
+}
+
+model Action is Memo {
+  execute: string;
+  success?: ActionResult;
+  error?: ActionResult;
+}
+
+model ActionResult is Memo {
+  redirect?: string;
+}
+
+model System is Memo {
   @key
   id: string;
 
   title: string;
   pages: Page[];
-  description?: string;
-  todo?: string;
 }
 
-model Page {
+model Page is Memo {
   @key
   id: string;
 
   type: PageType;
   title: string;
   events: PageEvent;
-  description?: string;
-  todo?: string;
   elements: Array<
     | ButtonElement
     | TextElement
@@ -61,7 +69,7 @@ model PageEvent {
 }
 
 @discriminator("type")
-model Element {
+model Element is Memo {
   @key
   id: string;
 
@@ -71,8 +79,6 @@ model Element {
   disable?: string;
   visible?: string;
   events?: ElementEvent;
-  description?: string;
-  todo?: string;
 }
 
 enum ElementType {

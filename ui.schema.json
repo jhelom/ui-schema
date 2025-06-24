@@ -1,35 +1,38 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "ui.schema.json",
+    "$id": "UI.json",
+    "type": "object",
+    "properties": {
+        "description": {
+            "type": "string"
+        },
+        "todo": {
+            "type": "string"
+        },
+        "ui": {
+            "type": "string"
+        },
+        "systems": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/System"
+            }
+        }
+    },
+    "required": [
+        "ui",
+        "systems"
+    ],
     "$defs": {
-        "UI": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "UI.json",
+        "System": {
             "type": "object",
             "properties": {
-                "ui": {
-                    "type": "string"
-                },
-                "systems": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "System.json"
-                    }
-                },
                 "description": {
                     "type": "string"
-                }
-            },
-            "required": [
-                "ui",
-                "systems"
-            ]
-        },
-        "System": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "System.json",
-            "type": "object",
-            "properties": {
+                },
+                "todo": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -39,14 +42,8 @@
                 "pages": {
                     "type": "array",
                     "items": {
-                        "$ref": "Page.json"
+                        "$ref": "#/$defs/Page"
                     }
-                },
-                "description": {
-                    "type": "string"
-                },
-                "todo": {
-                    "type": "string"
                 }
             },
             "required": [
@@ -56,82 +53,80 @@
             ]
         },
         "Page": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Page.json",
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "type": {
-                    "$ref": "PageType.json"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "events": {
-                    "$ref": "PageEvent.json"
-                },
                 "description": {
                     "type": "string"
                 },
                 "todo": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/$defs/PageType"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "events": {
+                    "$ref": "#/$defs/PageEvent"
+                },
                 "elements": {
                     "type": "array",
                     "items": {
                         "anyOf": [
                             {
-                                "$ref": "ButtonElement.json"
+                                "$ref": "#/$defs/ButtonElement"
                             },
                             {
-                                "$ref": "TextElement.json"
+                                "$ref": "#/$defs/TextElement"
                             },
                             {
-                                "$ref": "TextInputElement.json"
+                                "$ref": "#/$defs/TextInputElement"
                             },
                             {
-                                "$ref": "TextAreaElement.json"
+                                "$ref": "#/$defs/TextAreaElement"
                             },
                             {
-                                "$ref": "PasswordInputElement.json"
+                                "$ref": "#/$defs/PasswordInputElement"
                             },
                             {
-                                "$ref": "CheckboxElement.json"
+                                "$ref": "#/$defs/CheckboxElement"
                             },
                             {
-                                "$ref": "RadioElement.json"
+                                "$ref": "#/$defs/RadioElement"
                             },
                             {
-                                "$ref": "SelectElement.json"
+                                "$ref": "#/$defs/SelectElement"
                             },
                             {
-                                "$ref": "FileUploadElement.json"
+                                "$ref": "#/$defs/FileUploadElement"
                             },
                             {
-                                "$ref": "FileDownloadElement.json"
+                                "$ref": "#/$defs/FileDownloadElement"
                             },
                             {
-                                "$ref": "DateInputElement.json"
+                                "$ref": "#/$defs/DateInputElement"
                             },
                             {
-                                "$ref": "TimeInputElement.json"
+                                "$ref": "#/$defs/TimeInputElement"
                             },
                             {
-                                "$ref": "ImageElement.json"
+                                "$ref": "#/$defs/ImageElement"
                             },
                             {
-                                "$ref": "IconElement.json"
+                                "$ref": "#/$defs/IconElement"
                             },
                             {
-                                "$ref": "LinkElement.json"
+                                "$ref": "#/$defs/LinkElement"
                             },
                             {
-                                "$ref": "PaginationElement.json"
+                                "$ref": "#/$defs/PaginationElement"
                             },
                             {
-                                "$ref": "TableElement.json"
+                                "$ref": "#/$defs/TableElement"
                             }
                         ]
                     }
@@ -146,8 +141,6 @@
             ]
         },
         "PageType": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "PageType.json",
             "type": "string",
             "enum": [
                 "screen",
@@ -155,8 +148,6 @@
             ]
         },
         "PageEvent": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "PageEvent.json",
             "type": "object",
             "properties": {
                 "load": {
@@ -168,8 +159,6 @@
             }
         },
         "ButtonElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ButtonElement.json",
             "type": "object",
             "properties": {
                 "type": {
@@ -182,20 +171,355 @@
             ],
             "allOf": [
                 {
-                    "$ref": "InputElement.json"
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "TextElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "text"
+                },
+                "size": {
+                    "$ref": "#/$defs/TextSize"
+                },
+                "color": {
+                    "$ref": "#/$defs/Color"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
+                }
+            ]
+        },
+        "TextInputElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "textfield"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "TextAreaElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "textarea"
+                },
+                "rows": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "PasswordInputElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "password"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "CheckboxElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "checkbox"
+                },
+                "checked": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "RadioElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "radio"
+                },
+                "checked": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "SelectElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "select"
+                },
+                "options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/SelectOption"
+                    }
+                }
+            },
+            "required": [
+                "type",
+                "options"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "FileUploadElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "fileUpload"
+                },
+                "accept": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "FileDownloadElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "fileDownload"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
+                }
+            ]
+        },
+        "DateInputElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "date"
+                },
+                "format": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "TimeInputElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "time"
+                },
+                "format": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InputElement"
+                }
+            ]
+        },
+        "ImageElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "image"
+                },
+                "src": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "src"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
+                }
+            ]
+        },
+        "IconElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "icon"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "name"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
+                }
+            ]
+        },
+        "LinkElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "link"
+                },
+                "href": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "href"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
+                }
+            ]
+        },
+        "PaginationElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "pagination"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
+                }
+            ]
+        },
+        "TableElement": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "table"
+                },
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/TableColumn"
+                    }
+                },
+                "selectable": {
+                    "type": "boolean"
+                },
+                "sortable": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "type",
+                "columns"
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/$defs/Element"
                 }
             ]
         },
         "InputElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "InputElement.json",
             "type": "object",
             "properties": {
                 "placeholder": {
                     "type": "string"
                 },
                 "validations": {
-                    "$ref": "Validation.json"
+                    "$ref": "#/$defs/Validation"
                 },
                 "value": {
                     "type": "string"
@@ -206,13 +530,111 @@
             ],
             "allOf": [
                 {
-                    "$ref": "Element.json"
+                    "$ref": "#/$defs/Element"
                 }
             ]
         },
+        "TextSize": {
+            "type": "string",
+            "enum": [
+                "small",
+                "medium",
+                "large",
+                "xlarge"
+            ]
+        },
+        "Color": {
+            "type": "string",
+            "enum": [
+                "black",
+                "red",
+                "green",
+                "gray"
+            ]
+        },
+        "Element": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/$defs/ElementType"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "display": {
+                    "$ref": "#/$defs/ElementDisplay"
+                },
+                "disable": {
+                    "type": "string"
+                },
+                "visible": {
+                    "type": "string"
+                },
+                "events": {
+                    "$ref": "#/$defs/ElementEvent"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "name"
+            ]
+        },
+        "SelectOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "label",
+                "value"
+            ]
+        },
+        "TableColumn": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "sortable": {
+                    "type": "boolean"
+                },
+                "filterable": {
+                    "type": "boolean"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "title"
+            ]
+        },
         "Validation": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Validation.json",
             "type": "object",
             "properties": {
                 "required": {
@@ -247,48 +669,7 @@
                 }
             }
         },
-        "Element": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Element.json",
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "type": {
-                    "$ref": "ElementType.json"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "display": {
-                    "$ref": "ElementDisplay.json"
-                },
-                "disable": {
-                    "type": "string"
-                },
-                "visible": {
-                    "type": "string"
-                },
-                "events": {
-                    "$ref": "ElementEvent.json"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "todo": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "type",
-                "name"
-            ]
-        },
         "ElementType": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ElementType.json",
             "type": "string",
             "enum": [
                 "button",
@@ -311,8 +692,6 @@
             ]
         },
         "ElementDisplay": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ElementDisplay.json",
             "type": "string",
             "enum": [
                 "inline",
@@ -320,8 +699,6 @@
             ]
         },
         "ElementEvent": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ElementEvent.json",
             "type": "object",
             "properties": {
                 "click": {
@@ -337,521 +714,6 @@
                     "type": "string"
                 }
             }
-        },
-        "TextElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TextElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "text"
-                },
-                "size": {
-                    "$ref": "TextSize.json"
-                },
-                "color": {
-                    "$ref": "Color.json"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "TextSize": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TextSize.json",
-            "type": "string",
-            "enum": [
-                "small",
-                "medium",
-                "large",
-                "xlarge"
-            ]
-        },
-        "Color": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Color.json",
-            "type": "string",
-            "enum": [
-                "black",
-                "red",
-                "green",
-                "gray"
-            ]
-        },
-        "TextInputElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TextInputElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "textfield"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "TextAreaElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TextAreaElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "textarea"
-                },
-                "rows": {
-                    "type": "integer"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "PasswordInputElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "PasswordInputElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "password"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "CheckboxElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "CheckboxElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "checkbox"
-                },
-                "checked": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "RadioElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "RadioElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "radio"
-                },
-                "checked": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "SelectElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "SelectElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "select"
-                },
-                "options": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "SelectOption.json"
-                    }
-                }
-            },
-            "required": [
-                "type",
-                "options"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "SelectOption": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "SelectOption.json",
-            "type": "object",
-            "properties": {
-                "label": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "label",
-                "value"
-            ]
-        },
-        "FileUploadElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "FileUploadElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "fileUpload"
-                },
-                "accept": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "FileDownloadElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "FileDownloadElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "fileDownload"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "DateInputElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "DateInputElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "date"
-                },
-                "format": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "TimeInputElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TimeInputElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "time"
-                },
-                "format": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "InputElement.json"
-                }
-            ]
-        },
-        "ImageElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "ImageElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "image"
-                },
-                "src": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type",
-                "src"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "IconElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "IconElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "icon"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "size": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type",
-                "name"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "LinkElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "LinkElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "link"
-                },
-                "href": {
-                    "type": "string"
-                },
-                "target": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "type",
-                "href"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "PaginationElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "PaginationElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "pagination"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "TableElement": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TableElement.json",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "const": "table"
-                },
-                "columns": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "TableColumn.json"
-                    }
-                },
-                "selectable": {
-                    "type": "boolean"
-                },
-                "sortable": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "type",
-                "columns"
-            ],
-            "allOf": [
-                {
-                    "$ref": "Element.json"
-                }
-            ]
-        },
-        "TableColumn": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "TableColumn.json",
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "sortable": {
-                    "type": "boolean"
-                },
-                "filterable": {
-                    "type": "boolean"
-                },
-                "format": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "todo": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "title"
-            ]
-        },
-        "Bind": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "Bind.json",
-            "type": "object",
-            "properties": {
-                "source": {
-                    "type": "string"
-                },
-                "target": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "source",
-                "target"
-            ]
-        },
-        "API": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "API.json",
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "string"
-                },
-                "method": {
-                    "$ref": "HttpMethod.json"
-                },
-                "request": {
-                    "$ref": "#/$defs/RecordString"
-                },
-                "response": {
-                    "$ref": "#/$defs/RecordString"
-                },
-                "success": {
-                    "type": "string"
-                },
-                "error": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "todo": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "path",
-                "method",
-                "request",
-                "success"
-            ],
-            "$defs": {
-                "RecordString": {
-                    "type": "object",
-                    "properties": {},
-                    "unevaluatedProperties": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "HttpMethod": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "$id": "HttpMethod.json",
-            "type": "string",
-            "enum": [
-                "GET",
-                "POST",
-                "PUT",
-                "PATCH",
-                "DELETE"
-            ]
         }
     }
 }

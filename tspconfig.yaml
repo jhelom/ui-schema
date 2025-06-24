@@ -3,5 +3,4 @@ emit:
 options:
   "@typespec/json-schema":
     emitter-output-dir: "{output-dir}/../"
-    bundleId: "ui.schema.json"
     file-type: "json"
