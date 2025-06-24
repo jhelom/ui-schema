@@ -3,38 +3,42 @@ import "@typespec/json-schema";
 using JsonSchema;
 
 @jsonSchema
-namespace Schemas;
-
-model UI {
-  @pattern("^\\d+\\.\\d+\\.\\d+$")
+model UI is Memo {
   ui: string;
-
-  systems: Record<System>;
-  description?: string;
+  systems: System[];
 }
 
-model System {
-  @key
-  @pattern("^[a-z][a-z0-9_]*$")
-  id: string;
-
-  title: string;
-  pages: Record<Page>;
+model Memo {
   description?: string;
   todo?: string;
 }
 
-model Page {
+model Action is Memo {
+  execute: string;
+  success?: ActionResult;
+  error?: ActionResult;
+}
+
+model ActionResult is Memo {
+  redirect?: string;
+}
+
+model System is Memo {
   @key
-  @pattern("^[a-z][a-z0-9_]*$")
   id: string;
 
   title: string;
+  pages: Page[];
+}
+
+model Page is Memo {
+  @key
+  id: string;
+
   type: PageType;
-  events: Record<PageEvent>;
-  description?: string;
-  todo?: string;
-  elements: Record<
+  title: string;
+  events: PageEvent;
+  elements: Array<
     | ButtonElement
     | TextElement
     | TextInputElement
@@ -59,20 +63,22 @@ enum PageType {
   popup,
 }
 
+model PageEvent {
+  load?: string;
+  unload?: string;
+}
+
 @discriminator("type")
-model Element {
+model Element is Memo {
   @key
-  @pattern("^[a-z][a-z0-9_]*$")
   id: string;
 
-  name: string;
   type: ElementType;
+  name: string;
   display?: ElementDisplay;
   disable?: string;
   visible?: string;
-  events?: Record<ElementEvent>;
-  description?: string;
-  todo?: string;
+  events?: ElementEvent;
 }
 
 enum ElementType {
@@ -97,11 +103,27 @@ enum ElementType {
 
 model TextElement extends Element {
   type: ElementType.text;
+  size?: TextSize;
+  color?: Color;
+}
+
+enum TextSize {
+  small,
+  medium,
+  large,
+  xlarge,
+}
+
+enum Color {
+  black,
+  red,
+  green,
+  gray,
 }
 
 model InputElement extends Element {
   placeholder?: string;
-  validations?: Validation[];
+  validations?: Validation;
   value: string;
 }
 
@@ -134,21 +156,17 @@ model RadioElement extends InputElement {
 
 model SelectElement extends InputElement {
   type: ElementType.select;
-  options: Record<SelectOption>;
+  options: SelectOption[];
 }
 
 model SelectOption {
-  @key
-  @pattern("^[a-z][a-z0-9_]*$")
-  id: string;
-
   label: string;
   value: string;
 }
 
 model FileUploadElement extends InputElement {
   type: ElementType.fileUpload;
-  accept?: string; // e.g. "image/*,application/pdf"
+  accept?: string[]; // e.g. ["image/*", ".pdf"]
 }
 
 model FileDownloadElement extends Element {
@@ -167,14 +185,13 @@ model TimeInputElement extends InputElement {
 
 model TableElement extends Element {
   type: ElementType.table;
-  columns: Record<TableColumn>;
+  columns: TableColumn[];
   selectable?: boolean;
   sortable?: boolean;
 }
 
 model TableColumn {
   @key
-  @pattern("^[a-z][a-z0-9_]*$")
   id: string;
 
   title: string;
@@ -211,26 +228,11 @@ model Bind {
   target: string; // $Item(item).text
 }
 
-model PageEvent {
-  type: PageEventType;
-  handler: string;
-}
-
-enum PageEventType {
-  load,
-  unload,
-}
-
 model ElementEvent {
-  type: ElementEventType;
-  handler: string;
-}
-
-enum ElementEventType {
-  click,
-  change,
-  focus,
-  blur,
+  click?: string;
+  change?: string;
+  focus?: string;
+  blur?: string;
 }
 
 enum ElementDisplay {
@@ -238,71 +240,34 @@ enum ElementDisplay {
   block,
 }
 
-@discriminator("type")
 model Validation {
-  type: ValidationType;
-  value: string | integer | boolean;
+  required?: boolean;
+  minLength?: integer;
+  maxLength?: integer;
+  pattern?: string; // e.g. "^[a-zA-Z0-9]+$"
+  number?: boolean; // for numeric inputs
+  min?: integer; // for numeric inputs
+  max?: integer; // for numeric inputs
+  email?: boolean; // for email validation
+  url?: boolean; // for URL validation
+  phone?: boolean; // for phone number validation
 }
 
-enum ValidationType {
-  required,
-  minLength,
-  maxLength,
-  pattern,
-  integer,
-  minInteger,
-  maxInteger,
-  date,
-  email,
-  url,
+model API {
+  path: string;
+  method: HttpMethod;
+  request: Record<string>;
+  response?: Record<string>;
+  success: string;
+  error?: string;
+  description?: string;
+  todo?: string;
 }
 
-model RequiredValidation extends Validation {
-  type: ValidationType.required;
-  value: boolean;
-}
-
-model MinLengthValidation extends Validation {
-  type: ValidationType.minLength;
-  value: integer;
-}
-
-model MaxLengthValidation extends Validation {
-  type: ValidationType.maxLength;
-  value: integer;
-}
-
-model PatternValidation extends Validation {
-  type: ValidationType.pattern;
-  value: string;
-}
-
-model IntegerValidation extends Validation {
-  type: ValidationType.integer;
-  value: boolean;
-}
-
-model MinIntegerValidation extends Validation {
-  type: ValidationType.minInteger;
-  value: integer;
-}
-
-model MaxIntegerValidation extends Validation {
-  type: ValidationType.maxInteger;
-  value: integer;
-}
-
-model DateValidation extends Validation {
-  type: ValidationType.date;
-  value: string;
-}
-
-model EmailValidation extends Validation {
-  type: ValidationType.email;
-  value: string;
-}
-
-model UrlValidation extends Validation {
-  type: ValidationType.url;
-  value: string;
+enum HttpMethod {
+  GET,
+  POST,
+  PUT,
+  PATCH,
+  DELETE,
 }
