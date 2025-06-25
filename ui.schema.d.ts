@@ -5,6 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+export type IdString = string;
 export type PageType = 'screen' | 'popup';
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export type ButtonElement = InputElement & {
@@ -188,7 +189,7 @@ export interface UIJson {
 export interface System {
   description?: string;
   todo?: string;
-  id: string;
+  id: IdString;
   name: string;
   /**
    * @minItems 1
@@ -199,7 +200,7 @@ export interface System {
 export interface Page {
   description?: string;
   todo?: string;
-  id: string;
+  id: IdString;
   type: PageType;
   name: string;
   events?: PageEvent;
@@ -277,7 +278,7 @@ export interface RecordString {
 export interface Element {
   description?: string;
   todo?: string;
-  id: string;
+  id: IdString;
   type: ElementType;
   name: string;
   display?: ElementDisplay;
