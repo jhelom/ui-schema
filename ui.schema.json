@@ -10,13 +10,15 @@
             "type": "string"
         },
         "ui": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
         },
         "systems": {
             "type": "array",
             "items": {
                 "$ref": "#/$defs/System"
-            }
+            },
+            "minItems": 1
         }
     },
     "required": [
@@ -34,21 +36,23 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_-]$"
                 },
-                "title": {
+                "name": {
                     "type": "string"
                 },
                 "pages": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Page"
-                    }
+                    },
+                    "minItems": 1
                 }
             },
             "required": [
                 "id",
-                "title",
+                "name",
                 "pages"
             ]
         },
@@ -62,12 +66,13 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_-]$"
                 },
                 "type": {
                     "$ref": "#/$defs/PageType"
                 },
-                "title": {
+                "name": {
                     "type": "string"
                 },
                 "events": {
@@ -129,14 +134,14 @@
                                 "$ref": "#/$defs/TableElement"
                             }
                         ]
-                    }
+                    },
+                    "minItems": 1
                 }
             },
             "required": [
                 "id",
                 "type",
-                "title",
-                "events",
+                "name",
                 "elements"
             ]
         },
@@ -151,10 +156,10 @@
             "type": "object",
             "properties": {
                 "load": {
-                    "type": "string"
+                    "$ref": "#/$defs/EventHandler"
                 },
                 "unload": {
-                    "type": "string"
+                    "$ref": "#/$defs/EventHandler"
                 }
             }
         },
@@ -424,7 +429,7 @@
                     "type": "string",
                     "const": "icon"
                 },
-                "name": {
+                "src": {
                     "type": "string"
                 },
                 "size": {
@@ -433,7 +438,7 @@
             },
             "required": [
                 "type",
-                "name"
+                "src"
             ],
             "allOf": [
                 {
@@ -512,6 +517,33 @@
                 }
             ]
         },
+        "EventHandler": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                },
+                "action": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "api": {
+                    "$ref": "#/$defs/API"
+                }
+            },
+            "required": [
+                "action",
+                "success"
+            ]
+        },
         "InputElement": {
             "type": "object",
             "properties": {
@@ -523,11 +555,11 @@
                 },
                 "value": {
                     "type": "string"
+                },
+                "readonly": {
+                    "type": "boolean"
                 }
             },
-            "required": [
-                "value"
-            ],
             "allOf": [
                 {
                     "$ref": "#/$defs/Element"
@@ -562,7 +594,8 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_-]$"
                 },
                 "type": {
                     "$ref": "#/$defs/ElementType"
@@ -607,6 +640,12 @@
         "TableColumn": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -621,17 +660,39 @@
                 },
                 "format": {
                     "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "todo": {
-                    "type": "string"
                 }
             },
             "required": [
                 "id",
                 "title"
+            ]
+        },
+        "API": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "todo": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "method": {
+                    "$ref": "#/$defs/HttpMethod"
+                },
+                "request": {
+                    "$ref": "#/$defs/RecordString"
+                },
+                "response": {
+                    "$ref": "#/$defs/RecordString"
+                }
+            },
+            "required": [
+                "path",
+                "method",
+                "request"
             ]
         },
         "Validation": {
@@ -702,17 +763,34 @@
             "type": "object",
             "properties": {
                 "click": {
-                    "type": "string"
+                    "$ref": "#/$defs/EventHandler"
                 },
                 "change": {
-                    "type": "string"
+                    "$ref": "#/$defs/EventHandler"
                 },
                 "focus": {
-                    "type": "string"
+                    "$ref": "#/$defs/EventHandler"
                 },
                 "blur": {
-                    "type": "string"
+                    "$ref": "#/$defs/EventHandler"
                 }
+            }
+        },
+        "HttpMethod": {
+            "type": "string",
+            "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+            ]
+        },
+        "RecordString": {
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "type": "string"
             }
         }
     }

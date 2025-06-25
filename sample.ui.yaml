@@ -1,2 +1,21 @@
-ui: 0.1.0
-foo: bar
+ui: "1.0.0"
+systems:
+  - id: sample
+    name: sample
+    pages:
+      - id: list
+        name: List
+        elements:
+          - id: search-query-input
+            type: textfield
+
+          - id: search-button
+            type: button
+
+          - id: search-results
+            type: table
+            columns:
+              - id: id
+                title: id
+              - id: name
+                title: Name
