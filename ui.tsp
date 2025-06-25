@@ -3,41 +3,40 @@ import "@typespec/json-schema";
 using JsonSchema;
 
 @jsonSchema
-model UI is Memo {
+model UI is Note {
+  @pattern("^[0-9]+\\.[0-9]+\\.[0-9]+$")
   ui: string;
-  systems: System[];
+
+  @minItems(1)
+  systems: Array<System>;
 }
 
-model Memo {
+model Note {
   description?: string;
   todo?: string;
 }
 
-model Action is Memo {
-  execute: string;
-  success?: ActionResult;
-  error?: ActionResult;
-}
-
-model ActionResult is Memo {
-  redirect?: string;
-}
-
-model System is Memo {
+model System is Note {
+  @pattern("^[a-zA-Z][a-zA-Z0-9_-]$")
   @key
   id: string;
 
-  title: string;
-  pages: Page[];
+  name: string;
+
+  @minItems(1)
+  pages: Array<Page>;
 }
 
-model Page is Memo {
+model Page is Note {
+  @pattern("^[a-zA-Z][a-zA-Z0-9_-]$")
   @key
   id: string;
 
   type: PageType;
-  title: string;
-  events: PageEvent;
+  name: string;
+  events?: PageEvent;
+
+  @minItems(1)
   elements: Array<
     | ButtonElement
     | TextElement
@@ -64,12 +63,20 @@ enum PageType {
 }
 
 model PageEvent {
-  load?: string;
-  unload?: string;
+  load?: EventHandler;
+  unload?: EventHandler;
+}
+
+model EventHandler is Note {
+  action: string;
+  success: string;
+  error?: string;
+  api?: API;
 }
 
 @discriminator("type")
-model Element is Memo {
+model Element is Note {
+  @pattern("^[a-zA-Z][a-zA-Z0-9_-]$")
   @key
   id: string;
 
@@ -124,7 +131,8 @@ enum Color {
 model InputElement extends Element {
   placeholder?: string;
   validations?: Validation;
-  value: string;
+  value?: string;
+  readonly?: boolean;
 }
 
 model ButtonElement extends InputElement {
@@ -156,7 +164,7 @@ model RadioElement extends InputElement {
 
 model SelectElement extends InputElement {
   type: ElementType.select;
-  options: SelectOption[];
+  options: Array<SelectOption>;
 }
 
 model SelectOption {
@@ -185,21 +193,17 @@ model TimeInputElement extends InputElement {
 
 model TableElement extends Element {
   type: ElementType.table;
-  columns: TableColumn[];
+  columns: Array<TableColumn>;
   selectable?: boolean;
   sortable?: boolean;
 }
 
-model TableColumn {
-  @key
+model TableColumn is Note {
   id: string;
-
   title: string;
   sortable?: boolean;
   filterable?: boolean;
   format?: string;
-  description?: string;
-  todo?: string;
 }
 
 model PaginationElement extends Element {
@@ -213,7 +217,7 @@ model ImageElement extends Element {
 
 model IconElement extends Element {
   type: ElementType.icon;
-  name: string;
+  src: string;
   size?: string;
 }
 
@@ -229,10 +233,10 @@ model Bind {
 }
 
 model ElementEvent {
-  click?: string;
-  change?: string;
-  focus?: string;
-  blur?: string;
+  click?: EventHandler;
+  change?: EventHandler;
+  focus?: EventHandler;
+  blur?: EventHandler;
 }
 
 enum ElementDisplay {
@@ -253,15 +257,11 @@ model Validation {
   phone?: boolean; // for phone number validation
 }
 
-model API {
+model API is Note {
   path: string;
   method: HttpMethod;
   request: Record<string>;
   response?: Record<string>;
-  success: string;
-  error?: string;
-  description?: string;
-  todo?: string;
 }
 
 enum HttpMethod {
