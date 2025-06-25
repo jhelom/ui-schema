@@ -4,7 +4,7 @@ using JsonSchema;
 
 @jsonSchema
 model UI is Note {
-  @pattern("^[0-9]+\\.[0-9]+\\.[0-9]+$")
+  @pattern("^[0-9]+\\.[0-9]+\\.[0-9]*$")
   ui: string;
 
   @minItems(1)
@@ -17,9 +17,8 @@ model Note {
 }
 
 model System is Note {
-  @pattern("^[a-zA-Z][a-zA-Z0-9_-]$")
   @key
-  id: string;
+  id: IdString;
 
   name: string;
 
@@ -28,9 +27,8 @@ model System is Note {
 }
 
 model Page is Note {
-  @pattern("^[a-zA-Z][a-zA-Z0-9_-]$")
   @key
-  id: string;
+  id: IdString;
 
   type: PageType;
   name: string;
@@ -76,9 +74,8 @@ model EventHandler is Note {
 
 @discriminator("type")
 model Element is Note {
-  @pattern("^[a-zA-Z][a-zA-Z0-9_-]$")
   @key
-  id: string;
+  id: IdString;
 
   type: ElementType;
   name: string;
@@ -271,3 +268,6 @@ enum HttpMethod {
   PATCH,
   DELETE,
 }
+
+@pattern("^[a-zA-Z][a-zA-Z0-9_-]*$")
+scalar IdString extends string;
