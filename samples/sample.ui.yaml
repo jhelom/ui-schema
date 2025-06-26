@@ -1,0 +1,66 @@
+ui: "1.0.0"
+pages:
+  - id: list
+    title: List
+    type: screen
+    bindings:
+      $page().path.foo: $element(a).text
+    events:
+      load:
+        api:
+          path: /api/items
+          method: GET
+          request:
+            foo: bar
+        action: foo
+        success: foo
+    elements:
+      - id: list
+        name: Items
+        type: table
+        columns:
+          - id: id
+            title: id
+          - id: name
+            title: Name
+
+  - id: detail
+    name: Detail
+    type: screen
+    elements:
+      - id: id
+        name: id
+        type: text
+
+    events:
+      load:
+        action: foo
+        api:
+          path: /api/items/{id}
+          method: GET
+          request:
+            $path(id): $query(id)
+        success: foo
+
+  - id: create
+    name: Create
+    type: screen
+    elements:
+      - id: name
+        name: Name
+        type: textfield
+        validations:
+          required: true
+
+      - id: submit-button
+        name: Submit
+        type: button
+        events:
+          click:
+            action: submit
+            success: $navigate($page(list))
+            api:
+              path: /api/items
+              method: POST
+              request:
+                name: $bind($element(name).value)

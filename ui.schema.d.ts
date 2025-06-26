@@ -7,67 +7,57 @@
 
 export type IdString = string;
 export type PageType = 'screen' | 'popup';
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type HttpMethod = 'get' | 'put' | 'post' | 'patch' | 'delete';
 export type ButtonElement = InputElement & {
   type: 'button';
   [k: string]: unknown;
 };
 export type InputElement = Element & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
   [k: string]: unknown;
 } & {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
@@ -102,15 +92,18 @@ export type TextSize = 'small' | 'medium' | 'large' | 'xlarge';
 export type Color = 'black' | 'red' | 'green' | 'gray';
 export type TextInputElement = InputElement & {
   type: 'textfield';
+  placeholder?: string;
   [k: string]: unknown;
 };
 export type TextAreaElement = InputElement & {
   type: 'textarea';
   rows?: number;
+  placeholder?: string;
   [k: string]: unknown;
 };
 export type PasswordInputElement = InputElement & {
   type: 'password';
+  placeholder?: string;
   [k: string]: unknown;
 };
 export type CheckboxElement = InputElement & {
@@ -177,20 +170,11 @@ export type TableElement = Element & {
 };
 
 export interface UIJson {
-  description?: string;
-  todo?: string;
+  description?: string[];
+  todo?: string[];
   ui: string;
-  /**
-   * @minItems 1
-   */
-  systems: [System, ...System[]];
-  [k: string]: unknown;
-}
-export interface System {
-  description?: string;
-  todo?: string;
-  id: IdString;
-  name: string;
+  version?: string;
+  title?: string;
   /**
    * @minItems 1
    */
@@ -198,12 +182,17 @@ export interface System {
   [k: string]: unknown;
 }
 export interface Page {
-  description?: string;
-  todo?: string;
+  description?: string[];
+  todo?: string[];
   id: IdString;
   type: PageType;
-  name: string;
+  title: string;
+  tag?: string;
+  path: string;
+  pathParameters?: Parameter[];
+  queryParameters?: Parameter[];
   events?: PageEvent;
+  bindings?: RecordString;
   /**
    * @minItems 1
    */
@@ -249,14 +238,20 @@ export interface Page {
   ];
   [k: string]: unknown;
 }
+export interface Parameter {
+  name: string;
+  required?: boolean;
+  default?: string;
+  [k: string]: unknown;
+}
 export interface PageEvent {
   load?: EventHandler;
   unload?: EventHandler;
   [k: string]: unknown;
 }
 export interface EventHandler {
-  description?: string;
-  todo?: string;
+  description?: string[];
+  todo?: string[];
   action: string;
   success: string;
   error?: string;
@@ -264,8 +259,8 @@ export interface EventHandler {
   [k: string]: unknown;
 }
 export interface API {
-  description?: string;
-  todo?: string;
+  description?: string[];
+  todo?: string[];
   path: string;
   method: HttpMethod;
   request: RecordString;
@@ -276,11 +271,11 @@ export interface RecordString {
   [k: string]: unknown;
 }
 export interface Element {
-  description?: string;
-  todo?: string;
+  description?: string[];
+  todo?: string[];
   id: IdString;
   type: ElementType;
-  name: string;
+  title: string;
   display?: ElementDisplay;
   disable?: string;
   visible?: string;
@@ -313,8 +308,8 @@ export interface SelectOption {
   [k: string]: unknown;
 }
 export interface TableColumn {
-  description?: string;
-  todo?: string;
+  description?: string[];
+  todo?: string[];
   id: string;
   title: string;
   sortable?: boolean;

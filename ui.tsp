@@ -7,23 +7,32 @@ model UI is Note {
   @pattern("^[0-9]+\\.[0-9]+\\.[0-9]*$")
   ui: string;
 
-  @minItems(1)
-  systems: Array<System>;
-}
+  @pattern("^[0-9]+\\.[0-9]+\\.[0-9]*$")
+  version?: string;
 
-model Note {
-  description?: string;
-  todo?: string;
-}
-
-model System is Note {
-  @key
-  id: IdString;
-
-  name: string;
+  title?: string;
 
   @minItems(1)
   pages: Array<Page>;
+}
+
+@pattern("^[a-zA-Z][a-zA-Z0-9_-]*$")
+scalar IdString extends string;
+
+model Binding {
+  source: string;
+  target: string;
+}
+
+model Parameter {
+  name: string;
+  required?: boolean;
+  default?: string;
+}
+
+model Note {
+  description?: Array<string>;
+  todo?: Array<string>;
 }
 
 model Page is Note {
@@ -31,8 +40,13 @@ model Page is Note {
   id: IdString;
 
   type: PageType;
-  name: string;
+  title: string;
+  tag?: string;
+  path: string;
+  pathParameters?: Array<Parameter>;
+  queryParameters?: Array<Parameter>;
   events?: PageEvent;
+  bindings?: Record<string>;
 
   @minItems(1)
   elements: Array<
@@ -78,7 +92,7 @@ model Element is Note {
   id: IdString;
 
   type: ElementType;
-  name: string;
+  title: string;
   display?: ElementDisplay;
   disable?: string;
   visible?: string;
@@ -126,7 +140,6 @@ enum Color {
 }
 
 model InputElement extends Element {
-  placeholder?: string;
   validations?: Validation;
   value?: string;
   readonly?: boolean;
@@ -138,15 +151,18 @@ model ButtonElement extends InputElement {
 
 model TextInputElement extends InputElement {
   type: ElementType.textfield;
+  placeholder?: string;
 }
 
 model TextAreaElement extends InputElement {
   type: ElementType.textarea;
   rows?: integer;
+  placeholder?: string;
 }
 
 model PasswordInputElement extends InputElement {
   type: ElementType.password;
+  placeholder?: string;
 }
 
 model CheckboxElement extends InputElement {
@@ -262,12 +278,9 @@ model API is Note {
 }
 
 enum HttpMethod {
-  GET,
-  POST,
-  PUT,
-  PATCH,
-  DELETE,
+  get,
+  put,
+  post,
+  patch,
+  delete,
 }
-
-@pattern("^[a-zA-Z][a-zA-Z0-9_-]*$")
-scalar IdString extends string;

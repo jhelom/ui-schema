@@ -4,69 +4,55 @@
     "type": "object",
     "properties": {
         "description": {
-            "type": "string"
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
         "todo": {
-            "type": "string"
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
         "ui": {
             "type": "string",
             "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]*$"
         },
-        "systems": {
+        "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]*$"
+        },
+        "title": {
+            "type": "string"
+        },
+        "pages": {
             "type": "array",
             "items": {
-                "$ref": "#/$defs/System"
+                "$ref": "#/$defs/Page"
             },
             "minItems": 1
         }
     },
     "required": [
         "ui",
-        "systems"
+        "pages"
     ],
     "$defs": {
-        "System": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "todo": {
-                    "type": "string"
-                },
-                "id": {
-                    "$ref": "#/$defs/IdString"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "pages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/Page"
-                    },
-                    "minItems": 1
-                }
-            },
-            "required": [
-                "id",
-                "name",
-                "pages"
-            ]
-        },
-        "IdString": {
-            "type": "string",
-            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
-        },
         "Page": {
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "todo": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "id": {
                     "$ref": "#/$defs/IdString"
@@ -74,11 +60,32 @@
                 "type": {
                     "$ref": "#/$defs/PageType"
                 },
-                "name": {
+                "title": {
                     "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "pathParameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/Parameter"
+                    }
+                },
+                "queryParameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/Parameter"
+                    }
                 },
                 "events": {
                     "$ref": "#/$defs/PageEvent"
+                },
+                "bindings": {
+                    "$ref": "#/$defs/RecordString"
                 },
                 "elements": {
                     "type": "array",
@@ -143,15 +150,37 @@
             "required": [
                 "id",
                 "type",
-                "name",
+                "title",
+                "path",
                 "elements"
             ]
+        },
+        "IdString": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
         },
         "PageType": {
             "type": "string",
             "enum": [
                 "screen",
                 "popup"
+            ]
+        },
+        "Parameter": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "required": {
+                    "type": "boolean"
+                },
+                "default": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
             ]
         },
         "PageEvent": {
@@ -163,6 +192,13 @@
                 "unload": {
                     "$ref": "#/$defs/EventHandler"
                 }
+            }
+        },
+        "RecordString": {
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "type": "string"
             }
         },
         "ButtonElement": {
@@ -211,6 +247,9 @@
                 "type": {
                     "type": "string",
                     "const": "textfield"
+                },
+                "placeholder": {
+                    "type": "string"
                 }
             },
             "required": [
@@ -231,6 +270,9 @@
                 },
                 "rows": {
                     "type": "integer"
+                },
+                "placeholder": {
+                    "type": "string"
                 }
             },
             "required": [
@@ -248,6 +290,9 @@
                 "type": {
                     "type": "string",
                     "const": "password"
+                },
+                "placeholder": {
+                    "type": "string"
                 }
             },
             "required": [
@@ -523,10 +568,16 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "todo": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "action": {
                     "type": "string"
@@ -549,9 +600,6 @@
         "InputElement": {
             "type": "object",
             "properties": {
-                "placeholder": {
-                    "type": "string"
-                },
                 "validations": {
                     "$ref": "#/$defs/Validation"
                 },
@@ -590,10 +638,16 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "todo": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "id": {
                     "$ref": "#/$defs/IdString"
@@ -601,7 +655,7 @@
                 "type": {
                     "$ref": "#/$defs/ElementType"
                 },
-                "name": {
+                "title": {
                     "type": "string"
                 },
                 "display": {
@@ -620,7 +674,7 @@
             "required": [
                 "id",
                 "type",
-                "name"
+                "title"
             ]
         },
         "SelectOption": {
@@ -642,10 +696,16 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "todo": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "id": {
                     "type": "string"
@@ -672,10 +732,16 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "todo": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "path": {
                     "type": "string"
@@ -780,19 +846,12 @@
         "HttpMethod": {
             "type": "string",
             "enum": [
-                "GET",
-                "POST",
-                "PUT",
-                "PATCH",
-                "DELETE"
+                "get",
+                "put",
+                "post",
+                "patch",
+                "delete"
             ]
-        },
-        "RecordString": {
-            "type": "object",
-            "properties": {},
-            "unevaluatedProperties": {
-                "type": "string"
-            }
         }
     }
 }
